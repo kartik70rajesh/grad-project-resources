@@ -49,7 +49,7 @@ for i in predicted:
     for j in i:
         if(j>=threshold):
             ans=1
-            print('{} is r eal'.format(userTitle))
+            print('{} is real'.format(userTitle))
         if(ans==1):
             break
     if(ans==1):

@@ -5,25 +5,18 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split as tts
 from sklearn.metrics import accuracy_score
 
-wine = datasets.load_wine()
+train_news = pd.read_csv(train_filename)
+test_news = pd.read_csv(test_filename)
+valid_news = pd.read_csv(valid_filename)
 
-features = wine.data
-labels = wine.target
 
-# split the data into training and testing
+#split the data into training and testing
 train_feats, test_feats, train_labels, test_labels = tts(features, labels, test_size=0.2)
 
-# SVM with RBF kernel. Default setting of SVM.
-#clf = svm.SVC()
 
-# SVM with linear kernel
-#clf = svm.SVC(kernel='linear')
-
-# Decision Tree Classifier
-#clf = tree.DecisionTreeClassifier()
-
-# Random Forest Classifier
 clf = RandomForestClassifier()
+
+
 
 # print the details of the Classifier used
 print("Using", clf)
@@ -33,7 +26,7 @@ clf.fit(train_feats, train_labels)
 
 # predictions
 predictions = clf.predict(test_feats)
-print( "\nPredictions:", predictions)
+print("\nPredictions:" , predictions)
 
 score = 0
 for i in range(len(predictions)):
