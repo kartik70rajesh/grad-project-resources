@@ -1,2 +1,2 @@
 # be_project
-Fake News Detection using Machine Learning Algorithm
+Fake News Detection using Machine Learning Algorithms
