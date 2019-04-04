@@ -261,6 +261,7 @@ parameters = {'rf_tfidf__ngram_range': [(1, 1), (1, 2),(1,3),(1,4),(1,5)],
                'rf_tfidf__use_idf': (True, False),
                'rf_clf__max_depth': (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
 }
+#milestone
 
 gs_clf = GridSearchCV(random_forest_ngram, parameters, n_jobs=-1)
 gs_clf = gs_clf.fit(DataPrep.train_news['Statement'][:10000],DataPrep.train_news['Label'][:10000])
