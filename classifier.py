@@ -13,6 +13,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
+from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import confusion_matrix, f1_score, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import learning_curve
@@ -209,7 +210,7 @@ build_confusion_matrix(nb_pipeline_ngram)
 build_confusion_matrix(logR_pipeline_ngram)
 build_confusion_matrix(svm_pipeline_ngram)
 build_confusion_matrix(sgd_pipeline_ngram)
-build_confusion_matrix(random_forest_ngram)
+#build_confusion_matrix(random_forest_ngram)
 
 #========================================================================================
 #n-grams & tfidf confusion matrix and F1 scores
@@ -336,53 +337,54 @@ pickle.dump(logR_pipeline_ngram,open(model_file,'wb'))
 
 
 #Plotting learing curve
-def plot_learing_curve(pipeline,title):
-    size = 10000
-    cv = KFold(size, shuffle=True)
+# def plot_learing_curve(pipeline,title):
+#     size = 10000
+#     cv = ShuffleSplit(KFold(size, shuffle=True))
+
     
-    X = DataPrep.train_news["Statement"]
-    y = DataPrep.train_news["Label"]
+#     X = DataPrep.train_news["Statement"]
+#     y = DataPrep.train_news["Label"]
     
-    pl = pipeline
-    pl.fit(X,y)
+#     pl = pipeline
+#     pl.fit(X,y)
     
-    train_sizes, train_scores, test_scores = learning_curve(pl, X, y, n_jobs=-1, cv=cv, train_sizes=np.linspace(.1, 1.0, 5), verbose=0)
+#     train_sizes, train_scores, test_scores = learning_curve(pl, X, y, n_jobs=-1, cv=split(cv), train_sizes=np.linspace(.1, 1.0, 5), verbose=0)
        
-    train_scores_mean = np.mean(train_scores, axis=1)
-    train_scores_std = np.std(train_scores, axis=1)
-    test_scores_mean = np.mean(test_scores, axis=1)
-    test_scores_std = np.std(test_scores, axis=1)
+#     train_scores_mean = np.mean(train_scores, axis=1)
+#     train_scores_std = np.std(train_scores, axis=1)
+#     test_scores_mean = np.mean(test_scores, axis=1)
+#     test_scores_std = np.std(test_scores, axis=1)
      
-    plt.figure()
-    plt.title(title)
-    plt.legend(loc="best")
-    plt.xlabel("Training examples")
-    plt.ylabel("Score")
-    plt.gca().invert_yaxis()
+#     plt.figure()
+#     plt.title(title)
+#     plt.legend(loc="best")
+#     plt.xlabel("Training examples")
+#     plt.ylabel("Score")
+#     plt.gca().invert_yaxis()
     
-    # box-like grid
-    plt.grid()
+#     # box-like grid
+#     plt.grid()
     
-    # plot the std deviation as a transparent range at each training set size
-    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.1, color="r")
-    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.1, color="g")
+#     # plot the std deviation as a transparent range at each training set size
+#     plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.1, color="r")
+#     plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.1, color="g")
     
-    # plot the average training and test score lines at each training set size
-    plt.plot(train_sizes, train_scores_mean, 'o-', color="r", label="Training score")
-    plt.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
+#     # plot the average training and test score lines at each training set size
+#     plt.plot(train_sizes, train_scores_mean, 'o-', color="r", label="Training score")
+#     plt.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
     
-    # sizes the window for readability and displays the plot
-    # shows error from 0 to 1.1
-    plt.ylim(-.1,1.1)
-    plt.show()
+#     # sizes the window for readability and displays the plot
+#     # shows error from 0 to 1.1
+#     plt.ylim(-.1,1.1)
+#     plt.show()
 
 
-#below command will plot learing curves for each of the classifiers
-plot_learing_curve(logR_pipeline_ngram,"Naive-bayes Classifier")
-plot_learing_curve(nb_pipeline_ngram,"LogisticRegression Classifier")
-plot_learing_curve(svm_pipeline_ngram,"SVM Classifier")
-plot_learing_curve(sgd_pipeline_ngram,"SGD Classifier")
-plot_learing_curve(random_forest_ngram,"RandomForest Classifier")
+# #below command will plot learing curves for each of the classifiers
+# plot_learing_curve(logR_pipeline_ngram,"Naive-bayes Classifier")
+# plot_learing_curve(nb_pipeline_ngram,"LogisticRegression Classifier")
+# plot_learing_curve(svm_pipeline_ngram,"SVM Classifier")
+# plot_learing_curve(sgd_pipeline_ngram,"SGD Classifier")
+# plot_learing_curve(random_forest_ngram,"RandomForest Classifier")
 
 """
 by plotting the learning cureve for logistic regression, it can be seen that cross-validation score is stagnating throughout and it 

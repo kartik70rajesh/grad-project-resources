@@ -1,1 +1,4 @@
 glove.6B.50d.txt
+train.csv
+test.csv
+valid.csv
