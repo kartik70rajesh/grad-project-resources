@@ -61,13 +61,13 @@
       <div class="intro-text">
         <div class="intro-lead-in">Welcome To Your Fake News Detector</div>
         <div class="intro-heading">You can check things that you are unsure about</div>
-        <div class align="center" ="row">
+        <div class align="center"  >
             <div class="col-md-6">
-              <div class="form-group">
-                <input class="form-control" id="name" type="text" placeholder="Enter news *" required="required" data-validation-required-message="Please enter the news you  want to check.">
-                <p class="help-block text-danger"></p>
-        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="Analysis.html">Check News</a>
-      </div>
+<form action="call.php" method="POST">
+      <input class="form-control" id="name" type="text" placeholder="Enter news *" type="text" name="news">
+        <br>
+      <input class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" type="submit">
+</form>
     </div>
   </header>
 

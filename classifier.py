@@ -13,7 +13,6 @@ from sklearn.linear_model import SGDClassifier
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
-from sklearn.model_selection import ShuffleSplit
 from sklearn.metrics import confusion_matrix, f1_score, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import learning_curve
@@ -70,16 +69,20 @@ sgd_pipeline.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
 predicted_sgd = sgd_pipeline.predict(DataPrep.test_news['Statement'])
 np.mean(predicted_sgd == DataPrep.test_news['Label'])
 
+for x in range(1,10):
+    print("here1")
 
 #random forest
-random_forest = Pipeline([
-        ('rfCV',FeatureSelection.countV),
-        ('rf_clf',RandomForestClassifier(n_estimators=200,n_jobs=3))
-        ])
+# random_forest = Pipeline([
+#         ('rfCV',FeatureSelection.countV),
+#         ('rf_clf',RandomForestClassifier(n_estimators=200,n_jobs=-1))
+#         ])
     
-random_forest.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
-predicted_rf = random_forest.predict(DataPrep.test_news['Statement'])
-np.mean(predicted_rf == DataPrep.test_news['Label'])
+# random_forest.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
+# predicted_rf = random_forest.predict(DataPrep.test_news['Statement'])
+# np.mean(predicted_rf == DataPrep.test_news['Label'])
+for x in range(1,10):
+    print("here2")
 
 
 #User defined functon for K-Fold cross validatoin
@@ -110,11 +113,17 @@ def build_confusion_matrix(classifier):
     print(confusion))
     
 #K-fold cross validation for all classifiers
+print("naive bayes....................")
+print(DataPrep.train_news['Label'].shape)
 build_confusion_matrix(nb_pipeline)
+print("log r....................")
 build_confusion_matrix(logR_pipeline)
+print("svm....................")
 build_confusion_matrix(svm_pipeline)
+print("sgd....................")
 build_confusion_matrix(sgd_pipeline)
-build_confusion_matrix(random_forest)
+print("random forest....................")
+#build_confusion_matrix(random_forest)
 
 #========================================================================================
 #Bag of words confusion matrix and F1 scores
@@ -151,7 +160,7 @@ f1 scores of these classifiers. now lets enhance these features using term frequ
 """
 
 ##Now using n-grams
-#naive-bayes classifier
+print("naive-bayes classifier ngram pipeline.........................")
 nb_pipeline_ngram = Pipeline([
         ('nb_tfidf',FeatureSelection.tfidf_ngram),
         ('nb_clf',MultinomialNB())])
@@ -162,6 +171,7 @@ np.mean(predicted_nb_ngram == DataPrep.test_news['Label'])
 
 
 #logistic regression classifier
+print("log r classifier ngram pipeline....................")
 logR_pipeline_ngram = Pipeline([
         ('LogR_tfidf',FeatureSelection.tfidf_ngram),
         ('LogR_clf',LogisticRegression(penalty="l2",C=1))
@@ -173,6 +183,7 @@ np.mean(predicted_LogR_ngram == DataPrep.test_news['Label'])
 
 
 #linear SVM classifier
+print("svm classifier ngram pipeline....................")
 svm_pipeline_ngram = Pipeline([
         ('svm_tfidf',FeatureSelection.tfidf_ngram),
         ('svm_clf',svm.LinearSVC())
@@ -184,6 +195,7 @@ np.mean(predicted_svm_ngram == DataPrep.test_news['Label'])
 
 
 #sgd classifier
+print("sgd classifier ngram pipeline....................")
 sgd_pipeline_ngram = Pipeline([
          ('sgd_tfidf',FeatureSelection.tfidf_ngram),
          ('sgd_clf',SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, n_iter=5))
@@ -195,21 +207,26 @@ np.mean(predicted_sgd_ngram == DataPrep.test_news['Label'])
 
 
 #random forest classifier
-random_forest_ngram = Pipeline([
-        ('rf_tfidf',FeatureSelection.tfidf_ngram),
-        ('rf_clf',RandomForestClassifier(n_estimators=300,n_jobs=3))
-        ])
+print("random forest classifier ngram pipeline....................")
+# # random_forest_ngram = Pipeline([
+# #         ('rf_tfidf',FeatureSelection.tfidf_ngram),
+# #         ('rf_clf',RandomForestClassifier(n_estimators=300,n_jobs=-1))
+# #         ])
     
-random_forest_ngram.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
-predicted_rf_ngram = random_forest_ngram.predict(DataPrep.test_news['Statement'])
-np.mean(predicted_rf_ngram == DataPrep.test_news['Label'])
+# random_forest_ngram.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
+# predicted_rf_ngram = random_forest_ngram.predict(DataPrep.test_news['Statement'])
+# np.mean(predicted_rf_ngram == DataPrep.test_news['Label'])
+for x in range(1,10):
+    print("here3")
 
 
 #K-fold cross validation for all classifiers
+print("naive bayes ngram....................")
 build_confusion_matrix(nb_pipeline_ngram)
 build_confusion_matrix(logR_pipeline_ngram)
 build_confusion_matrix(svm_pipeline_ngram)
 build_confusion_matrix(sgd_pipeline_ngram)
+print("random forest ngram....................")
 #build_confusion_matrix(random_forest_ngram)
 
 #========================================================================================
@@ -245,9 +262,12 @@ print(classification_report(DataPrep.test_news['Label'], predicted_nb_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_LogR_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_svm_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_sgd_ngram))
-print(classification_report(DataPrep.test_news['Label'], predicted_rf_ngram))
+#print(classification_report(DataPrep.test_news['Label'], predicted_rf_ngram))
 
 DataPrep.test_news['Label'].shape
+print("shape.................")
+
+print(DataPrep.test_news['Label'].shape)
 
 """
 Out of all the models fitted, we would take 2 best performing model. we would call them candidate models
@@ -263,13 +283,16 @@ parameters = {'rf_tfidf__ngram_range': [(1, 1), (1, 2),(1,3),(1,4),(1,5)],
                'rf_clf__max_depth': (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
 }
 #milestone
+for x in range(1,10):
+    print("here5")
 
-gs_clf = GridSearchCV(random_forest_ngram, parameters, n_jobs=-1)
-gs_clf = gs_clf.fit(DataPrep.train_news['Statement'][:10000],DataPrep.train_news['Label'][:10000])
 
-gs_clf.best_score_
-gs_clf.best_params_
-gs_clf.cv_results_
+# gs_clf = GridSearchCV(random_forest_ngram, parameters, n_jobs=-1)
+# gs_clf = gs_clf.fit(DataPrep.train_news['Statement'][:10000],DataPrep.train_news['Label'][:10000])
+
+# gs_clf.best_score_
+# gs_clf.best_params_
+# gs_clf.cv_results_
 
 #logistic regression parameters
 parameters = {'LogR_tfidf__ngram_range': [(1, 1), (1, 2),(1,3),(1,4),(1,5)],
@@ -284,33 +307,40 @@ gs_clf.best_score_
 gs_clf.best_params_
 gs_clf.cv_results_
 
+for x in range(1,10):
+    print("here6")
+
+
 #Linear SVM 
-parameters = {'svm_tfidf__ngram_range': [(1, 1), (1, 2),(1,3),(1,4),(1,5)],
-               'svm_tfidf__use_idf': (True, False),
-               'svm_tfidf__smooth_idf': (True, False),
-               'svm_clf__penalty': ('l1','l2'),
-}
+# parameters = {'svm_tfidf__ngram_range': [(1, 1), (1, 2),(1,3),(1,4),(1,5)],
+#                'svm_tfidf__use_idf': (True, False),
+#                'svm_tfidf__smooth_idf': (True, False),
+#                'svm_clf__penalty': ('l1','l2'),
+# }
 
-gs_clf = GridSearchCV(svm_pipeline_ngram, parameters, n_jobs=-1)
-gs_clf = gs_clf.fit(DataPrep.train_news['Statement'][:10000],DataPrep.train_news['Label'][:10000])
+# gs_clf = GridSearchCV(svm_pipeline_ngram, parameters, n_jobs=-1)
+# gs_clf = gs_clf.fit(DataPrep.train_news['Statement'][:10000],DataPrep.train_news['Label'][:10000])
 
-gs_clf.best_score_
-gs_clf.best_params_
-gs_clf.cv_results_
+# gs_clf.best_score_
+# gs_clf.best_params_
+# gs_clf.cv_results_
 
 #by running above commands we can find the model with best performing parameters
 
 
 #running both random forest and logistic regression models again with best parameter found with GridSearch method
-random_forest_final = Pipeline([
-        ('rf_tfidf',TfidfVectorizer(stop_words='english',ngram_range=(1,3),use_idf=True,smooth_idf=True)),
-        ('rf_clf',RandomForestClassifier(n_estimators=300,n_jobs=3,max_depth=10))
-        ])
+# random_forest_final = Pipeline([
+#         ('rf_tfidf',TfidfVectorizer(stop_words='english',ngram_range=(1,3),use_idf=True,smooth_idf=True)),
+#         ('rf_clf',RandomForestClassifier(n_estimators=300,n_jobs=3,max_depth=10))
+#         ])
     
-random_forest_final.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
-predicted_rf_final = random_forest_final.predict(DataPrep.test_news['Statement'])
-np.mean(predicted_rf_final == DataPrep.test_news['Label'])
-print(metrics.classification_report(DataPrep.test_news['Label'], predicted_rf_final))
+# random_forest_final.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
+# predicted_rf_final = random_forest_final.predict(DataPrep.test_news['Statement'])
+# np.mean(predicted_rf_final == DataPrep.test_news['Label'])
+# print(metrics.classification_report(DataPrep.test_news['Label'], predicted_rf_final))
+for x in range(1,10):
+    print("here7")
+
 
 logR_pipeline_final = Pipeline([
         #('LogRCV',countV_ngram),
@@ -322,7 +352,7 @@ logR_pipeline_final.fit(DataPrep.train_news['Statement'],DataPrep.train_news['La
 predicted_LogR_final = logR_pipeline_final.predict(DataPrep.test_news['Statement'])
 np.mean(predicted_LogR_final == DataPrep.test_news['Label'])
 #accuracy = 0.62
-print(metrics.classification_report(DataPrep.test_news['Label'], predicted_LogR_final))
+print(classification_report(DataPrep.test_news['Label'], predicted_LogR_final))
 
 
 """
@@ -330,26 +360,26 @@ by running both random forest and logistic regression with GridSearch's best par
 forest model with n-gram has better accuracty than with the parameter estimated. The logistic regression model with best parameter 
 has almost similar performance as n-gram model so logistic regression will be out choice of model for prediction.
 """
-
+print("saving model............")
 #saving best model to the disk
-model_file = 'final_model.sav'
+model_file = 'final_model.txt'
 pickle.dump(logR_pipeline_ngram,open(model_file,'wb'))
 
 
 #Plotting learing curve
 # def plot_learing_curve(pipeline,title):
 #     size = 10000
-#     cv = ShuffleSplit(KFold(size, shuffle=True))
-
-    
+#     print("inside")
+#     cv = KFold(size, shuffle=True)
+#     print("inside1")
 #     X = DataPrep.train_news["Statement"]
 #     y = DataPrep.train_news["Label"]
     
 #     pl = pipeline
 #     pl.fit(X,y)
     
-#     train_sizes, train_scores, test_scores = learning_curve(pl, X, y, n_jobs=-1, cv=split(cv), train_sizes=np.linspace(.1, 1.0, 5), verbose=0)
-       
+#     train_sizes, train_scores, test_scores = learning_curve(pl, X, y, n_jobs=-1, cv=cv, train_sizes=np.linspace(.1, 1.0, 5), verbose=0)
+#     print("inside2")
 #     train_scores_mean = np.mean(train_scores, axis=1)
 #     train_scores_std = np.std(train_scores, axis=1)
 #     test_scores_mean = np.mean(test_scores, axis=1)
@@ -379,9 +409,11 @@ pickle.dump(logR_pipeline_ngram,open(model_file,'wb'))
 #     plt.show()
 
 
-# #below command will plot learing curves for each of the classifiers
-# plot_learing_curve(logR_pipeline_ngram,"Naive-bayes Classifier")
-# plot_learing_curve(nb_pipeline_ngram,"LogisticRegression Classifier")
+#below command will plot learing curves for each of the classifiers
+# print("naive bayes plot....................")
+# plot_learing_curve(nb_pipeline_ngram,"Naive-bayes Classifier")
+# print("log r plot....................")
+# plot_learing_curve(logR_pipeline_ngram,"LogisticRegression Classifier")
 # plot_learing_curve(svm_pipeline_ngram,"SVM Classifier")
 # plot_learing_curve(sgd_pipeline_ngram,"SGD Classifier")
 # plot_learing_curve(random_forest_ngram,"RandomForest Classifier")
@@ -408,11 +440,13 @@ def plot_PR_curve(classifier):
     plt.ylabel('Precision')
     plt.ylim([0.0, 1.05])
     plt.xlim([0.0, 1.0])
-    plt.title('2-class Random Forest Precision-Recall curve: AP={0:0.2f}'.format(
+    plt.title('2-class Logistic Regression Precision-Recall curve: AP={0:0.2f}'.format(
               average_precision))
-    
+    plt.show()
+print("plotting logr ngram")  
 plot_PR_curve(predicted_LogR_ngram)
-plot_PR_curve(predicted_rf_ngram)
+print("plotting rf ngram")
+#plot_PR_curve(predicted_rf_ngram)
 
 
 """
